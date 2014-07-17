@@ -5,7 +5,12 @@
 
 //include <../configuration.scad>;
 
-filament_offset = 22.5;
+// In bash:
+// for w in bolt idler; do openscad fisherstruder.scad -o fs_$w.stl; done
+
+print_what="all";
+//print_what="bolt";
+//print_what="idler";
 
 use <nema17_stand.scad>;
 
@@ -353,6 +358,4 @@ module extruder(print_what="all")
 		rotate([0,-90,0]) extruder_feeder_head(print_what);
 }
 
-extruder("all");
-//extruder("bolt");
-//extruder("idler");
+extruder(print_what);
