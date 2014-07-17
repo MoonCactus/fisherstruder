@@ -49,9 +49,13 @@ module extruder_feeder_head(what="all")
 	filament_offset_z= 8;
 	filament_offset_x= hobbed_bolt_d/2 - 0.8;
 
-	pneufit_support_length= 14;
+	// Bowden and pneufit related settings
 	bowden_od=4;
+	pneufit_support_length= 14;
+	pneufit_screw_diameter= 2.3;
+	pneufit_screw_shoulder= 10;
 
+	// Overall roundness
 	roundness= 3;
 	
 	// Computed values
@@ -246,7 +250,7 @@ module extruder_feeder_head(what="all")
 				translate([filament_offset_x, 0, filament_offset_z])
 					rotate([-90,0,0])
 						translate([0, 0, pneufit_support_length-6])
-							cylinder(r1=6, r2=5, h= 6 + 5 + tol);
+							cylinder(r1=pneufit_screw_shoulder/2+1, r2=pneufit_screw_shoulder/2, h= 6 + 5 + tol);
 				translate([0,0,extruder_height/2]) cube([60,60,extruder_height], center = true); // chop anything that protrudes top & bottom
 			}
 		}
@@ -260,7 +264,7 @@ module extruder_feeder_head(what="all")
 				cylinder(r=bowden_od/2, h=42, center = true, $fs=0.5);
 				//pushfit/pneufit mount
 				translate([0, 0, pneufit_support_length])
-					cylinder(r=2.3, h=5+tol, $fn=12);
+					cylinder(r=pneufit_screw_diameter, h=5+2*tol, $fn=12);
 		}
 
 		// Carve the horizontal screw that tightens the idler
