@@ -1,5 +1,7 @@
-// Based on "Makergear Filament drive goes Bowden" by Luke321
-// http://www.thingiverse.com/thing:63674
+// The fisherstruder - a compact 1.75mm filament extruder (direct drive with or without a nema 17 reductor)
+// CC-BY-NC jeremie.francois at gmail.com July 2014
+
+// Initially inspired by "Makergear Filament drive goes Bowden" by Luke321 at http://www.thingiverse.com/thing:63674
 
 //include <../configuration.scad>;
 
