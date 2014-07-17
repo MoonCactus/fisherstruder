@@ -52,9 +52,18 @@ module extruder_feeder_head(what="all")
 	// Bowden and pneufit related settings
 	bowden_od=4;
 	pneufit_support_length= 14;
-	pneufit_screw_diameter= 2.3;
-	pneufit_screw_shoulder= 10;
+	pneufit_screw_diameter= 4.6; // 5mm screw diameter
+	pneufit_shoulder_diameter= 10;
+	pneufit_shoulder_protrude= 0; // additional protrusion may be useful for some
 
+	/*
+	// Settings for a pneufit that would be 10mm long and 10mm screw diameter (eg. defaut E3D)
+	pneufit_support_length= 14 + 2;
+	pneufit_screw_diameter= 4.6*0 + 9;
+	pneufit_shoulder_diameter= 10 + 4;
+	pneufit_shoulder_protrude= 0 + 10; // additional protrusion may be useful for some
+	*/
+	
 	// Overall roundness
 	roundness= 3;
 	
@@ -246,11 +255,11 @@ module extruder_feeder_head(what="all")
 			// Side flats for the the pushfit connector and bowden output
 			intersection()
 			{
-				for(y=[-1,1]) scale([1,y,1])
+				for(y=[-1,1]) scale([1,y,1]) // y>0 for the output side
 				translate([filament_offset_x, 0, filament_offset_z])
 					rotate([-90,0,0])
 						translate([0, 0, pneufit_support_length-6])
-							cylinder(r1=pneufit_screw_shoulder/2+1, r2=pneufit_screw_shoulder/2, h= 6 + 5 + tol);
+							cylinder(r1=pneufit_shoulder_diameter/2+1, r2=pneufit_shoulder_diameter/2, h= 6 + 5 + tol + (y>0 ? pneufit_shoulder_protrude : 0));
 				translate([0,0,extruder_height/2]) cube([60,60,extruder_height], center = true); // chop anything that protrudes top & bottom
 			}
 		}
@@ -261,10 +270,10 @@ module extruder_feeder_head(what="all")
 		translate([filament_offset_x, 0, filament_offset_z])
 			rotate([-90,0,0])
 		{
-				cylinder(r=bowden_od/2, h=42, center = true, $fs=0.5);
+				cylinder(r=bowden_od/2, h=100, center = true, $fs=0.5);
 				//pushfit/pneufit mount
 				translate([0, 0, pneufit_support_length])
-					cylinder(r=pneufit_screw_diameter, h=5+2*tol, $fn=12);
+					cylinder(r=pneufit_screw_diameter/2, h=5+2*tol + pneufit_shoulder_protrude, $fn=12);
 		}
 
 		// Carve the horizontal screw that tightens the idler
@@ -317,8 +326,8 @@ module extruder_feeder_head(what="all")
 			// Optional: shave some material so as not to touch the stepper
 			translate([0,-20, extruder_height-slit_offset_depth]) cube([20,40,slit_offset_depth+tol]);
 			// Slit towards the hinge
-			translate([-slit_depth/2.0,-25,-tol])
-				cube([slit_depth,50,extruder_height+2*tol]);
+			translate([-slit_depth/2.0,-40,-tol])
+				cube([slit_depth,80,extruder_height+2*tol]);
 			
 			// Actually chop the whole in two when required
 			translate([0,-40,-extruder_height/2])
