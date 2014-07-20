@@ -1,15 +1,19 @@
 tol= 0.05;
 reduc_d= 36;
-wall_th= 2;
+reduc_d_tol= 0.8;
+wall_d_th= 2.2;
 reduc_len= 14; // 23 max
-nema_side_len= 42;
-slit_th=0.8;
+nema_side_len= 42+2; // nema side len (minimum 42)
+slit_th=1.2;
 
 m3= 3;
 m3_len= 8;
-base_th= 2.8;
+base_th1= 2;
+base_th2= 2.8;
 
-dist_b_screws= 36;
+rounding=2.2;
+
+dist_b_screws= nema_side_len-7;
 
 m3_d= 3;
 m3_nut_d= 6;
@@ -41,23 +45,37 @@ module ring_body()
 				rotate([0,90,0])
 					hull()
 				{
-					torus(r= reduc_d/2 + wall_th, rnd=2);
-					translate([0,0,reduc_len-2])
-						torus(r= reduc_d/2 + wall_th, rnd=2);
+					torus(r= reduc_d/2 + wall_d_th, rnd=rounding);
+					translate([0,0,reduc_len-rounding])
+						torus(r= reduc_d/2 + wall_d_th, rnd=rounding);
 				}
 		}
 		
 		translate([-tol,0,reduc_d/2 + (nema_side_len-reduc_d)/2])
 			rotate([0,90,0])
-				cylinder(r= reduc_d/2, h= reduc_len + 2*tol);
+			{
+				%cylinder(r= reduc_d/2, h= reduc_len + 2*tol);
+				cylinder(r= reduc_d/2 + reduc_d_tol/2, h= reduc_len + 2*tol);
+			}
 
 		// Holes for the attachment screws
 		for(y=[-1,+1]) scale([1,y,1])
 		{
 			translate([reduc_len/2, dist_b_screws/2, 0])
 			{
-				translate([0,0,-tol]) cylinder(r=m3/2, h=m3_len, $fs=0.8);
-				translate([0,0,base_th*2+slit_th]) hull()
+				if(y>0)
+					translate([0,0,-tol]) cylinder(r=m3/2, h=m3_len);
+				else
+				{
+					// onblong hole for the nylock
+					translate([0,0,-tol])
+					hull()
+					for(sdy=[-1,+1]) scale([1,sdy,1]) translate([0,0.6,0])
+					{
+						cylinder(r=m3/2, h=m3_len, $fs=0.8);
+					}
+				}
+				translate([0,0,base_th1+base_th2+slit_th]) hull()
 				{
 					% rotate([0,0,30]) cylinder(r=m3_nut_d/2, h=m3_nylock_h, $fn=6); // nylock ghost
 					for(dy=[0,1])
@@ -75,13 +93,13 @@ module ring_body()
 		// Slit on one side
 		hull()
 		{
-			translate([-tol,-nema_side_len/2 + 10, base_th]) cube([reduc_len+2*tol,slit_th,slit_th]);
+			translate([-tol,-nema_side_len/2 + 10, base_th1]) cube([reduc_len+2*tol,slit_th,slit_th]);
 			translate([-tol,-nema_side_len/2 + 10, 10]) cube([reduc_len+2*tol,slit_th,slit_th]);
 		}
 		hull()
 		{
-			translate([-tol,-nema_side_len/2 + 10, base_th]) cube([reduc_len+2*tol,slit_th,slit_th]);
-			translate([-tol,-nema_side_len/2 - 10, base_th]) cube([reduc_len+2*tol,slit_th,slit_th]);
+			translate([-tol,-nema_side_len/2 + 10, base_th1]) cube([reduc_len+2*tol,slit_th,slit_th]);
+			translate([-tol,-nema_side_len/2 - 10, base_th1]) cube([reduc_len+2*tol,slit_th,slit_th]);
 		}
 		
 	}
