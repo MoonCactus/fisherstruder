@@ -1,6 +1,11 @@
+// Ring holder for a nema17 reductor
+// E.g.: http://www.omc-stepperonline.com/gear-ratio-51-planetary-gearbox-with-nema-17-bipolar-stepper-17hs151684spg5-p-143.html
+// CC-BY-NC jeremie.francois at gmail.com July 2014
+// Use two M3 16 mm screws when your support is 6 mm thick
+
 tol= 0.05;
 reduc_d= 36;
-reduc_d_tol= 0.8;
+reduc_d_tol= 0.4;
 wall_d_th= 2.2;
 reduc_len= 14; // 23 max
 nema_side_len= 42+2; // nema side len (minimum 42)
@@ -8,8 +13,8 @@ slit_th=1.2;
 
 m3= 3;
 m3_len= 8;
-base_th1= 2;
-base_th2= 2.8;
+base_th1= 1.8;
+base_th2= 3;
 
 rounding=2.2;
 
@@ -17,7 +22,7 @@ dist_b_screws= nema_side_len-7;
 
 m3_d= 3;
 m3_nut_d= 6;
-m3_nut_dtol= 0.4;
+m3_nut_dtol= 0.3;
 m3_head_d= 5.5;
 m3_head_h= 2.2;
 m3_nylock_h= 3.8;
@@ -72,7 +77,7 @@ module ring_body()
 					hull()
 					for(sdy=[-1,+1]) scale([1,sdy,1]) translate([0,0.6,0])
 					{
-						cylinder(r=m3/2, h=m3_len, $fs=0.8);
+						cylinder(r=m3/2+0.1, h=m3_len, $fs=0.8);
 					}
 				}
 				translate([0,0,base_th1+base_th2+slit_th]) hull()
