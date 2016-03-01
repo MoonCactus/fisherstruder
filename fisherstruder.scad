@@ -3,10 +3,12 @@
 
 // Initially inspired by "Makergear Filament drive goes Bowden" by Luke321 at http://www.thingiverse.com/thing:63674
 
+// Nb: I still think it sucks without quick release ;)
+
 //include <../configuration.scad>;
 
 // In bash:
-// for w in bolt idler; do openscad fisherstruder.scad -o fs_$w.stl; done
+// for w in all bolt idler; do openscad fisherstruder.scad -D "print_what=\"$w\"" -o fs_$w.stl; done
 
 print_what="all";
 //print_what="bolt";
